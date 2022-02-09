@@ -200,6 +200,40 @@ public class FirstTest {
 
     }
 
+    @Test
+
+    public void testSearchResultsContainSearchInput() {
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia'",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                5
+        );
+
+        assertElementContainsText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container'][1]//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Java"
+        );
+
+        assertElementContainsText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container'][2]//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Java"
+        );
+
+        assertElementContainsText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container'][3]//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Java"
+        );
+
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -243,5 +277,12 @@ public class FirstTest {
         WebDriverWait wait = new WebDriverWait(driver, 1);
         wait.withMessage(errorMessage + "\n");
         return wait.until(ExpectedConditions.textToBe(by, expectedText));
+    }
+
+    private boolean assertElementContainsText(By by, String expectedText) {
+        waitForElementPresent(by, "Cannot find the element");
+        WebDriverWait wait = new WebDriverWait(driver, 1);
+        wait.withMessage(String.format("Search result does not contain %s", expectedText) + "\n");
+        return wait.until(ExpectedConditions.attributeContains(by, "text", expectedText));
     }
 }
