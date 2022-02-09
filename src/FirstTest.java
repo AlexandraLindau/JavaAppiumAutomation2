@@ -139,6 +139,67 @@ public class FirstTest {
         );
     }
 
+    @Test
+
+    public void testSearchResultsAndCancel() {
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia'",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Kotlin",
+                "Cannot find search input",
+                5
+        );
+
+        assertElementHasText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Kotlin']"),
+                "Kotlin",
+                "Cannot find article about 'Kotlin'"
+        );
+
+        assertElementHasText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Kotlin (programming language)']"),
+                "Kotlin (programming language)",
+                "Cannot find article about 'Kotlin (programming language)'"
+        );
+
+        assertElementHasText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Kotlin-class destroyer']"),
+                "Kotlin-class destroyer",
+                "Cannot find article about 'Kotlin-class destroyer'"
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find 'Close button'",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Kotlin']"),
+                "Article about 'Kotlin' is displayed",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Kotlin (programming language)']"),
+                "Article about 'Kotlin (programming language)' is displayed",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@text='Kotlin-class destroyer']"),
+                "Article about 'Kotlin-class destroyer' is displayed",
+                5
+        );
+
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
