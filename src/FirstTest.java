@@ -128,6 +128,17 @@ public class FirstTest {
                 articleTitle);
     }
 
+    @Test
+
+    public void testSearchFieldPlaceholder() {
+
+        assertElementHasText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_container']//*[@class='android.widget.TextView']"),
+                "Search Wikipedia",
+                "Search field placeholder is not 'Search Wikipedia'"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -166,4 +177,10 @@ public class FirstTest {
         return element;
     }
 
+    private boolean assertElementHasText(By by, String expectedText, String errorMessage) {
+        waitForElementPresent(by, "Cannot find the element");
+        WebDriverWait wait = new WebDriverWait(driver, 1);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(ExpectedConditions.textToBe(by, expectedText));
+    }
 }
