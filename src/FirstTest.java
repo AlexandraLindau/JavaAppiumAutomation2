@@ -18,6 +18,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class FirstTest {
 
@@ -673,6 +674,35 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void testElementTitleIsPresent() {
+
+        String article = "Automation for Apps";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia'",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Appium",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='" + article + "']"),
+                "Cannot find article: " + article,
+                5
+        );
+
+        Assert.assertTrue(
+                "Title is not present",
+                assertElementPresent(By.id("org.wikipedia:id/view_page_title_1text")));
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -783,5 +813,14 @@ public class FirstTest {
     private String waitForElementAndGetAttribute(By by, String attribute, String errorMessage, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+
+    private boolean assertElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }
