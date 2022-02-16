@@ -498,6 +498,181 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void testSaveTwoArticlesAndDeleteOne() {
+
+        String folderName = "Learning programming";
+        String firstArticle = "Automation for Apps";
+        String secondArticle = "Kotlin (programming language)";
+
+        // Find and add the 1st article
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia'",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Appium",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='" + firstArticle + "']"),
+                "Cannot find article: " + firstArticle,
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title: " + firstArticle,
+                15
+        );
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Cannot find button to open options menu",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='Add to reading list']"),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Cannot find 'Got it' button",
+                5
+        );
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/text_input"),
+                "Cannot find input to set article folder name",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                folderName,
+                "Cannot enter name of article folder",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("android:id/button1"),
+                "Cannot tap 'OK' button",
+                5
+        );
+
+        // Find and add the 2nd article
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/menu_page_search']"),
+                "Cannot find 'Search Wikipedia' on toolbar of an open article",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Kotlin",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='" + secondArticle + "']"),
+                "Cannot find article: " + secondArticle,
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title: " + secondArticle,
+                15
+        );
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Cannot find button to open options menu",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='Add to reading list']"),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + folderName + "']"),
+                "Cannot find and choose folder: " + folderName,
+                5
+        );
+
+        // Return to the main page
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot find close article button",
+                5
+        );
+
+        // Open folder with articles and delete one
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
+                "Cannot navigation button to 'My list'",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + folderName + "']"),
+                "Cannot find folder " + folderName,
+                5
+        );
+
+        swipeElementToLeft(
+                By.xpath("//*[@text='" + firstArticle + "']"),
+                "Cannot find first article and swipe it"
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@text='" + firstArticle + "']"),
+                "Cannot delete first article",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@text='" + secondArticle + "']"),
+                "Cannot find second article",
+                5
+        );
+
+        // Open saved article and verify the name
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + secondArticle + "']"),
+                "Cannot find article in folder: " + secondArticle,
+                5
+        );
+
+        String savedArticleTitle = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Cannot find article title",
+                15
+        );
+
+        Assert.assertEquals("Article titles do not match", savedArticleTitle, secondArticle);
+
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
