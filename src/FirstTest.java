@@ -37,6 +37,7 @@ public class FirstTest {
         capabilities.setCapability("app", "/Users/alexandra/Desktop/JavaAppiumAutomation2/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+
     }
 
     @After
@@ -700,7 +701,7 @@ public class FirstTest {
 
         Assert.assertTrue(
                 "Title is not present",
-                assertElementPresent(By.id("org.wikipedia:id/view_page_title_1text")));
+                assertElementPresent(By.id("org.wikipedia:id/view_page_title_text")));
     }
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
