@@ -38,6 +38,9 @@ public class FirstTest {
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 
+        if (driver.getOrientation().equals(ScreenOrientation.LANDSCAPE)) {
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        }
     }
 
     @After
