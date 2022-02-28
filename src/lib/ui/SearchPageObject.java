@@ -10,6 +10,7 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
+            SEARCH_RESULT_BY_INDEX_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container'][{SEARCH_RESULT_INDEX}]//*[@resource-id='org.wikipedia:id/page_list_item_title']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
 
@@ -20,6 +21,10 @@ public class SearchPageObject extends MainPageObject {
     /* Template methods */
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchElementByIndex(int id) {
+        return SEARCH_RESULT_BY_INDEX_TPL.replace("{SEARCH_RESULT_INDEX}", String.valueOf(id));
     }
     /* Template methods */
 
@@ -54,7 +59,7 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementAndClick(By.xpath(searchResultXpath), "Cannot find and click search result with substring " + substring, 10);
     }
 
-    public int getAmoutOfFoundArticles() {
+    public int getAmountOfFoundArticles() {
         this.waitForElementPresent(
                 By.xpath(SEARCH_RESULT_ELEMENT),
                 "Cannot find anything by the request",
@@ -69,5 +74,19 @@ public class SearchPageObject extends MainPageObject {
 
     public void assertThereIsNoSearchResult() {
         this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any results");
+    }
+
+    public void assertSearchFieldPlaceholder() {
+        this.assertElementHasText(By.xpath(SEARCH_INIT_ELEMENT), "Search Wikipedia", "Search field placeholder is not 'Search Wikipedia'");
+    }
+
+    public void assertArticleNotPresentInSearchResults(String articleSubstring) {
+        String searchResultXpath = getResultSearchElement(articleSubstring);
+        this.assertElementNotPresent(By.xpath(searchResultXpath), "Article with the name " + articleSubstring + " is still shown in the search results");
+    }
+
+    public void assertSearchResultContainsText(String searchLine, int index) {
+        String searchResultXpath = getResultSearchElementByIndex(index);
+        this.assertElementContainsText(By.xpath(searchResultXpath), searchLine, "Search result does not contain string " + searchLine);
     }
 }

@@ -32,4 +32,49 @@ public class MyListsTests extends CoreTestCase {
         myListsPageObject.openFolderByName(folderName);
         myListsPageObject.swipeByArticleToDelete(articleTitle);
     }
+
+    @Test
+    public void testSaveTwoArticlesAndDeleteOne() {
+
+        String folderName = "Learning programming";
+        String firstArticle = "Automation for Apps";
+        String secondArticle = "Kotlin (programming language)";
+
+        // Find and add the 1st article
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.clickByArticleWithSubstring(firstArticle);
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        articlePageObject.waitForTitleElement();
+        articlePageObject.addArticleToMyList(folderName);
+        articlePageObject.closeArticle();
+
+        // Find and add the 2nd article
+
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Kotlin");
+        searchPageObject.clickByArticleWithSubstring(secondArticle);
+        articlePageObject.addArticleToMyExistingList(folderName);
+
+        // Return to the main page
+
+        articlePageObject.closeArticle();
+
+        // Open folder with articles and delete one
+
+        NavigationUI navigationUI = new NavigationUI(driver);
+        navigationUI.clickMyLists();
+
+        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
+        myListsPageObject.openFolderByName(folderName);
+        myListsPageObject.swipeByArticleToDelete(firstArticle);
+
+        // Open saved article and verify the name
+
+        myListsPageObject.openSavedArticleByTitle(secondArticle);
+        articlePageObject.assertArticleNameIsCorrect(secondArticle);
+    }
 }

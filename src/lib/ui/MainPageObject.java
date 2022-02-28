@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.lang.model.element.Element;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -61,18 +60,22 @@ public class MainPageObject {
         return element;
     }
 
-    public boolean assertElementHasText(By by, String expectedText, String errorMessage) {
+    public void assertElementHasText(By by, String expectedText, String errorMessage) {
         waitForElementPresent(by, "Cannot find the element");
-        WebDriverWait wait = new WebDriverWait(driver, 1);
-        wait.withMessage(errorMessage + "\n");
-        return wait.until(ExpectedConditions.textToBe(by, expectedText));
+        WebElement element = driver.findElement(by);
+        if (!(element.getAttribute("text")).equals(expectedText)) {
+            String defaultMessage = "The element " + by.toString() + " is supposed to have text " + expectedText;
+            throw new AssertionError(defaultMessage + " " + errorMessage);
+        }
     }
 
-    public boolean assertElementContainsText(By by, String expectedText) {
+    public void assertElementContainsText(By by, String expectedText, String errorMessage) {
         waitForElementPresent(by, "Cannot find the element");
-        WebDriverWait wait = new WebDriverWait(driver, 1);
-        wait.withMessage(String.format("Search result does not contain %s", expectedText) + "\n");
-        return wait.until(ExpectedConditions.attributeContains(by, "text", expectedText));
+        WebElement element = driver.findElement(by);
+        if (!(element.getAttribute("text")).contains(expectedText)) {
+            String defaultMessage = "The element " + by.toString() + " is supposed to contain text " + expectedText;
+            throw new AssertionError(defaultMessage + " " + errorMessage);
+        }
     }
 
     public void swipeUp(int durationOfSwipeInSeconds) {

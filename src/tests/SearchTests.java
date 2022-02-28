@@ -7,6 +7,13 @@ import org.junit.Test;
 public class SearchTests extends CoreTestCase {
 
     @Test
+    public void testSearchFieldPlaceholder() {
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.assertSearchFieldPlaceholder();
+    }
+
+    @Test
     public void testSearch() {
 
         SearchPageObject searchPageObject = new SearchPageObject(driver);
@@ -34,7 +41,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject searchPageObject = new SearchPageObject(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchLine);
-        int amountOfSearchResults = searchPageObject.getAmoutOfFoundArticles();
+        int amountOfSearchResults = searchPageObject.getAmountOfFoundArticles();
 
         assertTrue("Not enough searchLine result items was found", amountOfSearchResults > 0);
 
@@ -51,5 +58,36 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.waitForEmptyResultLabel();
         searchPageObject.assertThereIsNoSearchResult();
 
+    }
+
+    @Test
+    public void testSearchResultsAndCancel() {
+
+        String searchLine = "Kotlin";
+        String firstArticleNameSubstring = "Kotlin (programming language)";
+        String secondArticleNameSubstring = "Kotlin-class destroyer";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(searchLine);
+        searchPageObject.waitForSearchResult(firstArticleNameSubstring);
+        searchPageObject.waitForSearchResult(secondArticleNameSubstring);
+        searchPageObject.clickCancelSearch();
+        searchPageObject.assertArticleNotPresentInSearchResults("Kotlin");
+        searchPageObject.assertArticleNotPresentInSearchResults("Kotlin (programming language)");
+        searchPageObject.assertArticleNotPresentInSearchResults("Kotlin-class destroyer");
+    }
+
+    @Test
+    public void testSearchResultsContainSearchInput() {
+
+        String searchLine = "Java";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(searchLine);
+        searchPageObject.assertSearchResultContainsText(searchLine, 1);
+        searchPageObject.assertSearchResultContainsText(searchLine, 2);
+        searchPageObject.assertSearchResultContainsText(searchLine, 3);
     }
 }

@@ -11,10 +11,17 @@ public class ArticlePageObject extends MainPageObject {
             FOOTER_ELEMENT = "//*[@text='View page in browser']",
             OPTIONS_BUTTON = "//android.widget.ImageView[@content-desc='More options']",
             OPTIONS_ADD_TO_MY_LIST_BUTTON = "//*[@text='Add to reading list']",
+            ADD_TO_MY_EXISTING_LIST_OVERLAY = "//*[@text='{FOLDER_NAME}']",
             ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
             MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
             MY_LIST_OK_BUTTON = "android:id/button1",
             CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+
+    /* Template methods */
+    private static String getFolderElement(String folderName) {
+        return ADD_TO_MY_EXISTING_LIST_OVERLAY.replace("{FOLDER_NAME}", folderName);
+    }
+    /* Template methods */
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -78,5 +85,35 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot find close article button",
                 5
         );
+    }
+
+    public void addArticleToMyExistingList(String folderName) {
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open options menu",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+        String xpath = getFolderElement(folderName);
+        this.waitForElementAndClick(
+                By.xpath(xpath),
+                "Cannot find existing folder " + folderName,
+                5
+        );
+    }
+
+    public void assertArticleNameIsCorrect(String articleName) {
+        this.waitForTitleElement();
+        WebElement element = driver.findElement(By.id(TITLE));
+        if (!element.getAttribute("text").equals(articleName)) {
+            String defaultMessage = "The article title does not equal " + articleName;
+            throw new AssertionError(defaultMessage);
+        }
     }
 }
