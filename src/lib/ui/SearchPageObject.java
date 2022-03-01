@@ -11,6 +11,7 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_RESULT_BY_INDEX_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container'][{SEARCH_RESULT_INDEX}]//*[@resource-id='org.wikipedia:id/page_list_item_title']",
+            SEARCH_RESULT_BY_SUBSTRING_IN_TITLE_AND_DESCRIPTION_TPL = "//android.widget.LinearLayout[android.widget.TextView[1][@text='{SUBSTRING_1}'] and android.widget.TextView[2][@text='SUBSTRING_2']]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
 
@@ -25,6 +26,12 @@ public class SearchPageObject extends MainPageObject {
 
     private static String getResultSearchElementByIndex(int id) {
         return SEARCH_RESULT_BY_INDEX_TPL.replace("{SEARCH_RESULT_INDEX}", String.valueOf(id));
+    }
+
+    private static String getResultSearchElementByTextInTitleAndDescription(String title, String description) {
+        return SEARCH_RESULT_BY_SUBSTRING_IN_TITLE_AND_DESCRIPTION_TPL
+                .replace("{SUBSTRING_1}", title)
+                .replace("SUBSTRING_2", description);
     }
     /* Template methods */
 
@@ -88,5 +95,10 @@ public class SearchPageObject extends MainPageObject {
     public void assertSearchResultContainsText(String searchLine, int index) {
         String searchResultXpath = getResultSearchElementByIndex(index);
         this.assertElementContainsText(By.xpath(searchResultXpath), searchLine, "Search result does not contain string " + searchLine);
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String searchResultXpath = getResultSearchElementByTextInTitleAndDescription(title, description);
+        this.waitForElementPresent(By.xpath(searchResultXpath), "Cannot find results with title: " + title + " and description: " + description);
     }
 }
