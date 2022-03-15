@@ -6,8 +6,8 @@ import org.openqa.selenium.By;
 public class MyListsPageObject extends MainPageObject {
 
     private static final String
-            FOLDER_BY_NAME_TPL = "//*[@text='{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "//*[@text='{TITLE}']/..";
+            FOLDER_BY_NAME_TPL = "xpath#//*[@text='{FOLDER_NAME}']",
+            ARTICLE_BY_TITLE_TPL = "xpath#//*[@text='{TITLE}']/..";
 
     private static String getFolderXpathByName(String folderName) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", folderName);
@@ -25,7 +25,7 @@ public class MyListsPageObject extends MainPageObject {
 
         String folderNameXpath = getFolderXpathByName(folderName);
         this.waitForElementAndClick(
-                By.xpath(folderNameXpath),
+                folderNameXpath,
                 "Cannot find folder " + folderName,
                 5
         );
@@ -34,7 +34,7 @@ public class MyListsPageObject extends MainPageObject {
     public void waitForArticleToAppearByTitle(String articleTitle) {
         String articleXpath = getSavedArticleXpathByName(articleTitle);
         this.waitForElementPresent(
-                By.xpath(articleXpath),
+                articleXpath,
                 "Cannot find saved article by title " + articleTitle,
                 15
         );
@@ -43,7 +43,7 @@ public class MyListsPageObject extends MainPageObject {
     public void waitForArticleToDisappearByTitle(String articleTitle) {
         String articleXpath = getSavedArticleXpathByName(articleTitle);
         this.waitForElementNotPresent(
-                By.xpath(articleXpath),
+                articleXpath,
                 "Saved article is still present with title " + articleTitle,
                 15
         );
@@ -53,7 +53,7 @@ public class MyListsPageObject extends MainPageObject {
         this.waitForArticleToAppearByTitle(articleTitle);
         String articleXpath = getSavedArticleXpathByName(articleTitle);
         this.swipeElementToLeft(
-                By.xpath(articleXpath),
+                articleXpath,
                 "Cannot find added article and swipe it"
         );
         this.waitForArticleToDisappearByTitle(articleTitle);
@@ -61,6 +61,6 @@ public class MyListsPageObject extends MainPageObject {
 
     public void openSavedArticleByTitle(String articleName) {
         String articleXpath = getSavedArticleXpathByName(articleName);
-        this.waitForElementAndClick(By.xpath(articleXpath), "Cannot find and open article " + articleName, 5);
+        this.waitForElementAndClick(articleXpath, "Cannot find and open article " + articleName, 5);
     }
 }
