@@ -10,7 +10,7 @@ public class WelcomePageObject extends MainPageObject {
     STEP_NEW_WAYS_TO_EXPLORE = "//*[@value='New ways to explore']",
     STEP_SEARCH_IN_300_LANGUAGES = "//*[@value='Search in nearly 300 languages']",
     STEP_LEARN_MORE_ABOUT_DATA_COLLECTION_LINK = "//*[@value='Learn more about data collected']",
-    NEXT_LINK = "//*[@value='Next']",
+    NEXT_LINK = "//*[@value='Next']/..",
     GET_STARTED_BUTTON = "//*[@value='Get started']";
 
 
