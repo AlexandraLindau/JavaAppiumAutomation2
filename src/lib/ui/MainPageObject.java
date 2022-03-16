@@ -172,7 +172,7 @@ public class MainPageObject {
     }
 
     private By getLocatorByString(String locator_with_type) {
-        String [] exploaded_locator = locator_with_type.split(Pattern.quote("#"));
+        String [] exploaded_locator = locator_with_type.split(Pattern.quote(":"), 2);
         String by_type = exploaded_locator[0];
         String locator = exploaded_locator[1];
 

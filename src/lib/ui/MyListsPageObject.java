@@ -6,8 +6,8 @@ import org.openqa.selenium.By;
 public class MyListsPageObject extends MainPageObject {
 
     private static final String
-            FOLDER_BY_NAME_TPL = "xpath#//*[@text='{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "xpath#//*[@text='{TITLE}']/..";
+            FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']",
+            ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']/..";
 
     private static String getFolderXpathByName(String folderName) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", folderName);

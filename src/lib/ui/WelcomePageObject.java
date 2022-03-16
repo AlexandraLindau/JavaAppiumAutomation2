@@ -6,12 +6,12 @@ import org.openqa.selenium.By;
 public class WelcomePageObject extends MainPageObject {
 
     private static final String
-    STEP_LEARN_MORE_LINK = "xpath#//*[@value='Learn more about Wikipedia']",
-    STEP_NEW_WAYS_TO_EXPLORE = "xpath#//*[@value='New ways to explore']",
-    STEP_SEARCH_IN_300_LANGUAGES = "xpath#//*[@value='Search in nearly 300 languages']",
-    STEP_LEARN_MORE_ABOUT_DATA_COLLECTION_LINK = "xpath#//*[@value='Learn more about data collected']",
-    NEXT_LINK = "xpath#//*[@value='Next']/..",
-    GET_STARTED_BUTTON = "xpath#//*[@value='Get started']";
+    STEP_LEARN_MORE_LINK = "xpath://*[@value='Learn more about Wikipedia']",
+    STEP_NEW_WAYS_TO_EXPLORE = "xpath://*[@value='New ways to explore']",
+    STEP_SEARCH_IN_300_LANGUAGES = "xpath://*[@value='Search in nearly 300 languages']",
+    STEP_LEARN_MORE_ABOUT_DATA_COLLECTION_LINK = "xpath://*[@value='Learn more about data collected']",
+    NEXT_LINK = "xpath://*[@value='Next']/..",
+    GET_STARTED_BUTTON = "xpath://*[@value='Get started']";
 
 
 
