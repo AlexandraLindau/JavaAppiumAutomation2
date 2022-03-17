@@ -110,7 +110,7 @@ public class ArticlePageObject extends MainPageObject {
 
     public void assertArticleNameIsCorrect(String articleName) {
         this.waitForTitleElement();
-        WebElement element = driver.findElement(By.id(TITLE));
+        WebElement element = driver.findElement(getLocatorByString(TITLE));
         if (!element.getAttribute("text").equals(articleName)) {
             String defaultMessage = "The article title does not equal " + articleName;
             throw new AssertionError(defaultMessage);

@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
@@ -67,7 +68,7 @@ public class MainPageObject {
         By by = this.getLocatorByString(locator);
         waitForElementPresent(locator, "Cannot find the element");
         WebElement element = driver.findElement(by);
-        if (!(element.getAttribute("text")).equals(expectedText)) {
+        if (!(getText(element)).equals(expectedText)) {
             String defaultMessage = "The element " + locator + " is supposed to have text " + expectedText;
             throw new AssertionError(defaultMessage + " " + errorMessage);
         }
@@ -77,7 +78,7 @@ public class MainPageObject {
         By by = this.getLocatorByString(locator);
         waitForElementPresent(locator, "Cannot find the element");
         WebElement element = driver.findElement(by);
-        if (!(element.getAttribute("text")).contains(expectedText)) {
+        if (!(getText(element)).contains(expectedText)) {
             String defaultMessage = "The element " + locator + " is supposed to contain text " + expectedText;
             throw new AssertionError(defaultMessage + " " + errorMessage);
         }
@@ -171,7 +172,7 @@ public class MainPageObject {
         }
     }
 
-    private By getLocatorByString(String locator_with_type) {
+    protected By getLocatorByString(String locator_with_type) {
         String [] exploaded_locator = locator_with_type.split(Pattern.quote(":"), 2);
         String by_type = exploaded_locator[0];
         String locator = exploaded_locator[1];
@@ -183,5 +184,15 @@ public class MainPageObject {
         } else {
             throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type);
         }
+    }
+
+    private String getText(WebElement element) {
+
+        String text = null;
+        if (Platform.getInstance().isAndroid()) {
+            text = element.getAttribute("text");
+        } else if (Platform.getInstance().isIOS()) {
+            text = element.getAttribute("value");
+        } return text;
     }
 }
