@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.xml.bind.Element;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -41,6 +42,7 @@ public class MainPageObject {
 
         WebElement element = waitForElementPresent(locator, errorMessage, timeoutInSeconds);
         element.click();
+        System.out.println(locator);
         return element;
     }
 
@@ -64,7 +66,7 @@ public class MainPageObject {
         return element;
     }
 
-    public void assertElementHasText(String locator, String expectedText, String errorMessage) {
+    public void assertElementHasText(String locator, String expectedText, String errorMessage) throws Exception {
         By by = this.getLocatorByString(locator);
         waitForElementPresent(locator, "Cannot find the element");
         WebElement element = driver.findElement(by);
@@ -74,10 +76,12 @@ public class MainPageObject {
         }
     }
 
-    public void assertElementContainsText(String locator, String expectedText, String errorMessage) {
+    public void assertElementContainsText(String locator, String expectedText, String errorMessage) throws Exception {
         By by = this.getLocatorByString(locator);
-        waitForElementPresent(locator, "Cannot find the element");
+        waitForElementPresent(locator, "Cannot find the element " + locator);
         WebElement element = driver.findElement(by);
+        System.out.println(locator);
+        System.out.println(by.toString());
         if (!(getText(element)).contains(expectedText)) {
             String defaultMessage = "The element " + locator + " is supposed to contain text " + expectedText;
             throw new AssertionError(defaultMessage + " " + errorMessage);
@@ -186,13 +190,16 @@ public class MainPageObject {
         }
     }
 
-    private String getText(WebElement element) {
-
-        String text = null;
+    private String getText(WebElement element) throws Exception {
+        String text;
         if (Platform.getInstance().isAndroid()) {
             text = element.getAttribute("text");
+            System.out.println(text);
         } else if (Platform.getInstance().isIOS()) {
             text = element.getAttribute("value");
+            System.out.println(text);
+        } else {
+            throw new Exception("Invalid platform");
         } return text;
     }
 }

@@ -11,7 +11,7 @@ public class Platform {
 
     private static final String PLATFORM_IOS = "ios";
     private static final String PLATFORM_ANDROID = "android";
-    private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
+    private static final String APPIUM_URL = "http://0.0.0.0:4723/wd/hub";
 
     private static Platform instance;
 
@@ -57,8 +57,8 @@ public class Platform {
     private DesiredCapabilities getIOSDesiredCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("deviceName", "iPhone 13");
-        capabilities.setCapability("platformVersion", "15.4");
+        capabilities.setCapability("deviceName", "iPhone 11");
+        capabilities.setCapability("platformVersion", "14.5");
         capabilities.setCapability("app", "/Users/alexandra/Desktop/JavaAppiumAutomation2/apks/Wikipedia.app");
         return capabilities;
     }

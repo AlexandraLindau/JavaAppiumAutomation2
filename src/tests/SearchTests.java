@@ -8,7 +8,7 @@ import org.junit.Test;
 public class SearchTests extends CoreTestCase {
 
     @Test
-    public void testSearchFieldPlaceholder() {
+    public void testSearchFieldPlaceholder() throws Exception {
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.assertSearchFieldPlaceholder();
@@ -80,7 +80,7 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    public void testSearchResultsContainSearchInput() {
+    public void testSearchResultsContainSearchInput() throws Exception {
 
         String searchLine = "Java";
 
@@ -88,15 +88,9 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(searchLine);
 
-        if (Platform.getInstance().isAndroid()) {
-            searchPageObject.assertSearchResultContainsText(searchLine, 1);
-            searchPageObject.assertSearchResultContainsText(searchLine, 2);
-            searchPageObject.assertSearchResultContainsText(searchLine, 3);
-        } else if (Platform.getInstance().isIOS()) {
-            searchPageObject.assertSearchResultContainsText(searchLine, 0);
-            searchPageObject.assertSearchResultContainsText(searchLine, 1);
-            searchPageObject.assertSearchResultContainsText(searchLine, 2);
-        }
+        searchPageObject.assertSearchResultContainsText(searchLine, 1);
+        searchPageObject.assertSearchResultContainsText(searchLine, 2);
+        searchPageObject.assertSearchResultContainsText(searchLine, 3);
     }
 
     @Test

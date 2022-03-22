@@ -83,7 +83,7 @@ abstract public class SearchPageObject extends MainPageObject {
         this.assertElementNotPresent(SEARCH_RESULT_ELEMENT, "We supposed not to find any results");
     }
 
-    public void assertSearchFieldPlaceholder() {
+    public void assertSearchFieldPlaceholder() throws Exception {
         this.assertElementHasText(SEARCH_INIT_ELEMENT, "Search Wikipedia", "Search field placeholder is not 'Search Wikipedia'");
     }
 
@@ -92,13 +92,14 @@ abstract public class SearchPageObject extends MainPageObject {
         this.assertElementNotPresent(searchResultXpath, "Article with the name " + articleSubstring + " is still shown in the search results");
     }
 
-    public void assertSearchResultContainsText(String searchLine, int index) {
+    public void assertSearchResultContainsText(String searchLine, int index) throws Exception {
         String searchResultXpath = getResultSearchElementByIndex(index);
         this.assertElementContainsText(searchResultXpath, searchLine, "Search result does not contain string " + searchLine);
     }
 
     public void waitForElementByTitleAndDescription(String title, String description) {
         String searchResultXpath = getResultSearchElementByTextInTitleAndDescription(title, description);
-        this.waitForElementPresent(searchResultXpath, "Cannot find results with title: " + title + " and description: " + description);
+        this.waitForElementPresent(searchResultXpath, "Cannot find results with title: " + title +
+                " and description: " + description + "\nby xpath: " + searchResultXpath);
     }
 }
