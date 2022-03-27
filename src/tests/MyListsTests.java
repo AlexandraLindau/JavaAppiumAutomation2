@@ -5,60 +5,85 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import lib.ui.factories.MyListPageObjectFactory;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
 
-    @Test
-    public void testSaveFirstArticleToMyList() {
+    private final static String folderName = "Learning programming";
 
-        String folderName = "Learning programming";
+    @Test
+    public void testSaveFirstArticleToMyList() throws Exception {
+
+        String article = "Appium";
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Appium");
-        searchPageObject.clickByArticleWithSubstring("Automation for Apps");
+        searchPageObject.clickByArticleWithSubstring(article);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-        articlePageObject.waitForTitleElement();
-        String articleTitle = articlePageObject.getArticleTitle();
-        articlePageObject.addArticleToMyList(folderName);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.waitForTitleElement();
+        } else {
+            articlePageObject.waitForTitleElementIOS(article);
+        }
+
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyList(folderName);
+        } else {
+            articlePageObject.addFirstArticleToMySaved();
+        }
+
         articlePageObject.closeArticle();
 
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.openFolderByName(folderName);
-        myListsPageObject.swipeByArticleToDelete(articleTitle);
+        MyListsPageObject myListsPageObject = MyListPageObjectFactory.get(driver);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(folderName);
+        }
+        myListsPageObject.swipeByArticleToDelete(article);
     }
 
     @Test
-    public void testSaveTwoArticlesAndDeleteOne() {
+    public void testSaveTwoArticlesAndDeleteOne() throws Exception {
 
-        String folderName = "Learning programming";
-        String firstArticle = "Automation for Apps";
-        String secondArticle = "Kotlin (programming language)";
+        String firstArticle = "Kotlin (programming language)";
+        String secondArticle = "Appium";
 
         // Find and add the 1st article
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.typeSearchLine("Kotlin");
         searchPageObject.clickByArticleWithSubstring(firstArticle);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
-        articlePageObject.waitForTitleElement();
-        articlePageObject.addArticleToMyList(folderName);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
+
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.waitForTitleElement();
+            articlePageObject.addArticleToMyList(folderName);
+        } else {
+            articlePageObject.waitForTitleElementIOS(firstArticle);
+            articlePageObject.addFirstArticleToMySaved();
+        }
         articlePageObject.closeArticle();
 
         // Find and add the 2nd article
 
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("Kotlin");
+        searchPageObject.typeSearchLine("Appium");
         searchPageObject.clickByArticleWithSubstring(secondArticle);
-        articlePageObject.addArticleToMyExistingList(folderName);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyExistingList(folderName);
+        } else {
+            articlePageObject.addArticleToMySaved();
+        }
 
         // Return to the main page
 
@@ -66,12 +91,18 @@ public class MyListsTests extends CoreTestCase {
 
         // Open folder with articles and delete one
 
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.openFolderByName(folderName);
+        MyListsPageObject myListsPageObject = MyListPageObjectFactory.get(driver);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(folderName);
+        }
         myListsPageObject.swipeByArticleToDelete(firstArticle);
+
+        // Check that the 2nd article is still in 'Saved'
+
+        myListsPageObject.assertArticleIsPresent(secondArticle);
 
         // Open saved article and verify the name
 

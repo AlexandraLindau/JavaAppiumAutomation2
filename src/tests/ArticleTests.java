@@ -3,25 +3,26 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {
 
     @Test
-    public void testCompareArticleTitle() {
+    public void testCompareArticleTitle() throws Exception {
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
-        searchPageObject.typeSearchLine("JAVA");
-        searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        searchPageObject.typeSearchLine("Appium");
+        searchPageObject.clickByArticleWithSubstring("Automation for Apps");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String articleTitle = articlePageObject.getArticleTitle();
 
         assertEquals(
                 "Unexpected title",
-                "Java (programming language)",
+                "Appium",
                 articleTitle);
     }
 
@@ -33,7 +34,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.typeSearchLine("Appium");
         searchPageObject.clickByArticleWithSubstring("Automation for Apps");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         articlePageObject.swipeToFooter();
     }
@@ -49,7 +50,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.typeSearchLine(search);
         searchPageObject.clickByArticleWithSubstring(article);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
     }
 }
